@@ -1,0 +1,133 @@
+.home-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  .upload-container {
+    width: 100%;
+    max-width: 600px;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  h1 {
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .description {
+    color: #666;
+    margin-bottom: 2rem;
+  }
+
+  .file-input-container {
+    position: relative;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .file-input {
+    position: absolute;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  .browse-button {
+    display: inline-block;
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 0.75rem 1.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+    width: fit-content;
+  }
+
+  .browse-button:hover {
+    background-color: #dee2e6;
+  }
+
+  .selected-file {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .file-name {
+    font-weight: 500;
+    word-break: break-all;
+  }
+
+  .file-size {
+    color: #6c757d;
+    white-space: nowrap;
+    margin-left: 1rem;
+  }
+
+  .upload-button {
+    display: inline-block;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .upload-button:hover:not(:disabled) {
+    background-color: #0069d9;
+  }
+
+  .upload-button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+  }
+
+  .error-message {
+    color: #dc3545;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #f8d7da;
+    border-radius: 4px;
+  }
+
+  .success-message {
+    color: #28a745;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #d4edda;
+    border-radius: 4px;
+  }
+
+  .upload-info {
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  .upload-info p {
+    margin: 0.5rem 0;
+  }
