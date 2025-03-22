@@ -1,7 +1,7 @@
 # GraphMiner
 GraphMiner is an application which can be used for extracting structural patterns and valuable insights from
-graph-structured data. It takes a JSON or GraphML file as input and then validates and visualize it. The user
-can then choose what operations they want to perform on the graph.
+graph-structured data. It takes a JSON or GraphML file as input, validates it, and visualizes it. The user
+can then choose which operations they want to perform on the graph.
 
 ## Planed features
 - [ ] JSON schema validator
@@ -32,26 +32,25 @@ To build a redistributable, production mode package, use ` wails build`.
 ```mermaid
 sequenceDiagram
 User->>GraphMinerApp GUI: insert a file
-GraphMinerApp GUI->>GraphMinerApp GUI: check the extension
-alt extension is different than .json
-    GraphMinerApp GUI->>User: display error to user
+GraphMinerApp GUI->>GraphMinerApp GUI: check the file extension
+alt extension is not .json
+    GraphMinerApp GUI->>User: display an error to the user
 else extension is valid
     GraphMinerApp GUI->>GraphMinerApp backend: pass the file to the backend
-    GraphMinerApp backend->>GraphMinerApp backend: validates file content
-    alt content is not valid
-        GraphMinerApp backend->>GraphMinerApp GUI: return error
-        GraphMinerApp GUI->>User: display error to user
+    GraphMinerApp backend->>GraphMinerApp backend: validate the file content
+    alt content is invalid
+        GraphMinerApp backend->>GraphMinerApp GUI: return an error
+        GraphMinerApp GUI->>User: display an error to the user
     else content is valid
-        GraphMinerApp backend->>GraphMinerApp GUI: return that content is valid
-        GraphMinerApp GUI->>GraphMinerApp backend: get visualization of the input
-        GraphMinerApp backend->>GraphMinerApp backend: creates the visualization
-        GraphMinerApp backend->>GraphMinerApp GUI: return an SVG file
-        GraphMinerApp GUI->>User: display visualization to user
-        User->>GraphMinerApp GUI: pick operation to perfrom on the graph
+        GraphMinerApp backend->>GraphMinerApp GUI: return the input graph described in DOT
+        GraphMinerApp GUI->>GraphMinerApp GUI: create visualization of the input file
+        GraphMinerApp GUI->>User: display the visualization to the user
+        User->>GraphMinerApp GUI: select an operation to perform on the graph
         GraphMinerApp GUI->>GraphMinerApp backend: trigger the operation
-        GraphMinerApp backend->>GraphMinerApp backend: perform operation
-        GraphMinerApp backend->>GraphMinerApp GUI: return the output
-        GraphMinerApp GUI->>User: display the output
+        GraphMinerApp backend->>GraphMinerApp backend: execute the operation
+        GraphMinerApp backend->>GraphMinerApp GUI: return the result
+        GraphMinerApp GUI->>GraphMinerApp GUI: create visualization of the result
+        GraphMinerApp GUI->>User: display the result visualization
     end
 end
 ```
