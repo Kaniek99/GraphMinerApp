@@ -1,10 +1,16 @@
 import { useState, useRef } from "react";
+import { Graphviz } from "graphviz-react";
 import "./App.css";
-import { UploadFile } from "../wailsjs/go/main/App";
+import {
+  UploadFile,
+  GetDotGraph,
+  OpenFileDialog,
+} from "../wailsjs/go/main/App";
 
 function App() {
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
+  const [data, setData] = useState<string>("");
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -42,7 +48,8 @@ function App() {
     setIsUploading(true);
 
     try {
-      UploadFile(file);
+      const filePath = await OpenFileDialog();
+      UploadFile({ name: file.name, path: filePath });
 
       setUploadSuccess(true);
       setFile(null);
@@ -57,9 +64,23 @@ function App() {
     }
   };
 
-  const triggerFileInput = () => {
-    fileInputRef.current?.click();
+  const triggerFileInput = async () => {
+    const res = await GetDotGraph();
+    setData(res);
   };
+
+  function Item({ data }: { data: string }) {
+    if (data) {
+      return (
+        <Graphviz
+          className="graph-visualization"
+          options={{ height: 800, width: 800, zoom: true }}
+          dot={data}
+        />
+      );
+    }
+    return "";
+  }
 
   return (
     <div className="home-page">
@@ -82,7 +103,7 @@ function App() {
               className="browse-button"
               onClick={triggerFileInput}
             >
-              Browse Files
+              Visualize graph
             </button>
             {file && (
               <div className="selected-file">
@@ -115,6 +136,9 @@ function App() {
             <strong>Allowed file types:</strong> {ALLOWED_EXTENSIONS.join(", ")}
           </p>
         </div>
+      </div>
+      <div className="wrapper">
+        <Item data={data} />
       </div>
     </div>
   );

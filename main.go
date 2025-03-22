@@ -17,9 +17,10 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:  "GraphMinerApp",
-		Width:  1024,
-		Height: 768,
+		Title: "GraphMinerApp",
+		// just for POC
+		Width:  1464,
+		Height: 837,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
