@@ -42,7 +42,7 @@ else extension is valid
         GraphMinerApp backend->>GraphMinerApp GUI: return an error
         GraphMinerApp GUI->>User: display an error to the user
     else content is valid
-        GraphMinerApp backend->>GraphMinerApp GUI: return the input graph described in DOT
+        GraphMinerApp backend->>GraphMinerApp GUI: return the input graph described in [DOT](https://graphviz.org/doc/info/lang.html)
         GraphMinerApp GUI->>GraphMinerApp GUI: create visualization of the input file
         GraphMinerApp GUI->>User: display the visualization to the user
         User->>GraphMinerApp GUI: select an operation to perform on the graph
