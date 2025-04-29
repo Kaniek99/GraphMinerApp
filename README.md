@@ -4,11 +4,11 @@ graph-structured data. It takes a JSON or GraphML file as input, validates it, a
 can then choose which operations they want to perform on the graph.
 
 ## Planed features
-- [ ] JSON schema validator
+- [x] JSON schema validator
 - [ ] GraphML schema validator
-- [ ] JSON to graph structure
+- [x] JSON to graph structure
 - [ ] GraphML to graph structure
-- [ ] Visualize graphs
+- [x] Visualize graphs
 - [ ] gSPAN implementation
 - [ ] FSM implementation
 

@@ -2,9 +2,9 @@ import { useState, useRef } from "react";
 import { Graphviz } from "graphviz-react";
 import "./App.css";
 import {
-  UploadFile,
+  ChooseInputFile,
   GetDotGraph,
-  OpenFileDialog,
+  ValidateInputFile,
 } from "../wailsjs/go/main/App";
 
 function App() {
@@ -48,9 +48,9 @@ function App() {
     setIsUploading(true);
 
     try {
-      const filePath = await OpenFileDialog();
-      UploadFile({ name: file.name, path: filePath });
-
+      // const filePath = await ChooseInputFile();
+      await ChooseInputFile();
+      await ValidateInputFile();
       setUploadSuccess(true);
       setFile(null);
       if (fileInputRef.current) {
@@ -65,6 +65,7 @@ function App() {
   };
 
   const triggerFileInput = async () => {
+    ChooseInputFile();
     const res = await GetDotGraph();
     setData(res);
   };

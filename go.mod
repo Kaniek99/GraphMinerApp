@@ -3,6 +3,7 @@ module GraphMinerApp
 go 1.23
 
 require (
+	github.com/dominikbraun/graph v0.23.0
 	github.com/wailsapp/wails/v2 v2.10.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 )
