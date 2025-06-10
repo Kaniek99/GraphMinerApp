@@ -7,12 +7,23 @@ import (
 	"os"
 	"strings"
 
+	gr "GraphMinerApp/pkg/graph"
 	"GraphMinerApp/pkg/parser"
 
 	"github.com/dominikbraun/graph"
 	"github.com/dominikbraun/graph/draw"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
+
+/*
+ **********************************************************
+ *                                                        *
+ *                                                        *
+ *  Reading this code is painful, refactor required ASAP  *
+ *                                                        *
+ *                                                        *
+ **********************************************************
+ */
 
 type InputFile struct {
 	Extension string
@@ -57,12 +68,14 @@ func (inf *InputFile) Validate() error {
 
 // App struct
 type App struct {
-	// pathToTempFile  string
-	bufferWithGraph *bytes.Buffer
+	bufferWithGraph        *bytes.Buffer
+	InputGraphs            []graph.Graph[string, string]
+	InputGraphsDotLanguage []string
 
 	ctx context.Context
 	inf *InputFile
 	jp  *parser.JSONParser
+	gs  *gr.GraphFileSchema
 	// gp  *parser.GraphMLParser
 }
 
@@ -129,30 +142,61 @@ func (a *App) ChooseInputFile() error {
 		fmt.Println("Error while parsing: ", err)
 	}
 
+	// clear old data
+	a.InputGraphs = nil
+	a.InputGraphsDotLanguage = nil
+
+	a.gs = graphSchema
+
 	if graphSchema.Graph != nil {
 		graphSchema.Graph.PrintGraph()
+
+		inputGraph := graph.New(graph.StringHash)
+		for _, node := range graphSchema.Graph.Nodes {
+			inputGraph.AddVertex(node.Label)
+		}
+		for _, edge := range graphSchema.Graph.Edges {
+			inputGraph.AddEdge(edge.Source, edge.Target)
+		}
+		a.InputGraphs = append(a.InputGraphs, inputGraph)
+
+		inputDotGraph, err := a.CreateDotGraph(inputGraph)
+		if err != nil {
+			fmt.Println("Error while creating DOT graph:", err)
+			return err
+		}
+
+		a.InputGraphsDotLanguage = append(a.InputGraphsDotLanguage, inputDotGraph)
 	} else if len(graphSchema.Graphs) > 0 {
-		for _, graph := range graphSchema.Graphs {
-			graph.PrintGraph()
+		for _, graphTest := range graphSchema.Graphs {
+			graphTest.PrintGraph()
+
+			inputGraph := graph.New(graph.StringHash)
+			for _, node := range graphTest.Nodes {
+				inputGraph.AddVertex(node.Label)
+			}
+			for _, edge := range graphTest.Edges {
+				inputGraph.AddEdge(edge.Source, edge.Target)
+			}
+			a.InputGraphs = append(a.InputGraphs, inputGraph)
+
+			inputDotGraph, err := a.CreateDotGraph(inputGraph)
+			if err != nil {
+				fmt.Println("Error while creating DOT graph:", err)
+				return err
+			}
+
+			a.InputGraphsDotLanguage = append(a.InputGraphsDotLanguage, inputDotGraph)
 		}
 	} else {
 		fmt.Println("No graph found in the file")
 	}
 
-	g := graph.New(graph.StringHash)
-	for _, node := range graphSchema.Graph.Nodes {
-		g.AddVertex(node.ID)
-	}
-	for _, edge := range graphSchema.Graph.Edges {
-		g.AddEdge(edge.Source, edge.Target)
-	}
-
-	a.CreateDotGraph(g)
-
 	return nil
 }
 
-func (a *App) CreateDotGraph(g graph.Graph[string, string]) error {
+func (a *App) CreateDotGraph(g graph.Graph[string, string]) (string, error) {
+	// make this parameter to be set by the user
 	layout := "circo"
 	buf := bytes.NewBuffer(nil)
 
@@ -161,8 +205,7 @@ func (a *App) CreateDotGraph(g graph.Graph[string, string]) error {
 	err := draw.DOT(g, buf)
 	if err != nil {
 		fmt.Println("Error while creating DOT graph: ", err)
-		// return "", err
-		return err
+		return "", err
 	}
 
 	// Get the generated DOT string
@@ -178,17 +221,18 @@ func (a *App) CreateDotGraph(g graph.Graph[string, string]) error {
 
 	a.bufferWithGraph = bytes.NewBufferString(dotString)
 
-	fmt.Println("DOT graph: ", buf.String())
-	return nil
+	// fmt.Println("DOT graph: ", buf.String())
+	return buf.String(), nil
 }
 
-func (a *App) GetDotGraph() (string, error) {
-	if a.bufferWithGraph == nil {
-		return "", fmt.Errorf("no graph created")
+func (a *App) GetDotGraphs() ([]string, error) {
+	// if a.bufferWithGraph == nil {
+	// return []string{""}, fmt.Errorf("no graph created")
+	// }
+	for _, dotGraph := range a.InputGraphsDotLanguage {
+		fmt.Println("Get DOT graph: ", dotGraph)
 	}
-	dotGraph := a.bufferWithGraph.String()
-	fmt.Println("DOT graph: ", dotGraph)
-	return dotGraph, nil
+	return a.InputGraphsDotLanguage, nil
 }
 
 func (a *App) ValidateInputFile() (bool, error) {
