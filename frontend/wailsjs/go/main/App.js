@@ -10,8 +10,12 @@ export function CreateDotGraph(arg1) {
   return window['go']['main']['App']['CreateDotGraph'](arg1);
 }
 
-export function GetDotGraph() {
-  return window['go']['main']['App']['GetDotGraph']();
+export function GetDotGraphs() {
+  return window['go']['main']['App']['GetDotGraphs']();
+}
+
+export function PerformgSpan() {
+  return window['go']['main']['App']['PerformgSpan']();
 }
 
 export function ValidateInputFile() {

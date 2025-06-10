@@ -8,6 +8,23 @@
       Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
 
+  .navigation-container {
+    width: 100%;
+    max-width: 600px;
+    /* padding: 1.5rem; */
+    background-color: #ffffff;
+    border-radius: 8px;
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .navigation-container .button-row {
+    display: flex;
+    gap: 3rem;
+  }
+
   .upload-container {
     width: 100%;
     max-width: 600px;
